@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Pêu</title>
+    <style>
+        .titulo {
+            color: #e74c3c;
+            font-family: "Nunito", sans-serif;
+        }
+
+        /* Estilos para os botões */
+        .botao {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: "Nunito", sans-serif;
+        }
+
+        /* Estilo para o botão "Escolher arquivo" */
+        #btnEscolherArquivo {
+            margin-bottom: 10px;
+        }
+
+        body {
+            font-family: "Nunito", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="titulo">Seu Pêu</h1>
+    <img src="porks.jpg" alt=
+    <p>O Seu Pêu é um bar tradicional com uma atmosfera acolhedora e culinária caseira. Com uma decoração rústica e ocasional música ao vivo, é um ponto de encontro onde os moradores locais se reúnem para desfrutar de boa comida e conversas animadas em um ambiente familiar e acolhedor.
+</p>
+
+    <h2 class="titulo">Enviar Avaliação</h2>
+    <button id="cameraBotao">Tirar Foto</button>
+
+    <!-- Botão para selecionar imagem da galeria -->
+    <input type="file" accept="image/*" id="galleryInput" style="display: none;">
+
+    <form id="avaliacaoForm">
+        <label for="texto">Escreva um pequeno bloco de texto:</label><br>
+        <textarea id="texto" name="texto" rows="4" cols="50"></textarea><br><br>
+        <button type="submit" class="botao">Enviar Avaliação</button>
+    </form>
+
+    <h2 class="titulo">Como Chegar</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.3844453261586!2d-34.873624688488746!3d-8.062210780526788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab18a52193388d%3A0x6611efd6cd31b0a3!2sBar%2028!5e0!3m2!1spt-BR!2sbr!4v1714012570315!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <script>
+        const cameraBotao = document.getElementById('cameraBotao');
+        const galleryInput = document.getElementById('galleryInput');
+        const form = document.getElementById('avaliacaoForm');
+
+        // Função para abrir a câmera
+        cameraBotao.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const mediaRecorder = new MediaRecorder(stream);
+                const chunks = [];
+
+                mediaRecorder.ondataavailable = function(event) {
+                    chunks.push(event.data);
+                }
+
+                mediaRecorder.onstop = function() {
+                    const blob = new Blob(chunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'video.webm';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 0);
+                }
+
+                mediaRecorder.start();
+                setTimeout(() => {
+                    mediaRecorder.stop();
+                }, 5000); // Gravação por 5 segundos (ajuste conforme necessário)
+            } catch (error) {
+                console.error('Erro ao acessar a câmera:', error);
+            }
+        });
+
+        // Função para selecionar uma imagem da galeria
+        galleryInput.addEventListener('change', () => {
+            const file = galleryInput.files[0];
+            // Processar o arquivo de imagem selecionado
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+            const texto = document.getElementById('texto').value;
+
+
+            console.log('Texto da avaliação:', texto);
+
+        });
+    </script>
+</body>
+</html>
